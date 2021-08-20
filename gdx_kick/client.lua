@@ -1,11 +1,11 @@
-local wait = Config.FirstJoinDelay
+--[[local wait = Config.FirstJoinDelay
 Citizen.CreateThread(function()
 	Citizen.Wait(wait)
 	while true do
 		TriggerServerEvent('sendSession:PlayerNumber', #GetActivePlayers())
 		Citizen.Wait(wait)
 	end
-end)
+end)]]--
 
 secondsUntilKick = Config.AfkTime
 
