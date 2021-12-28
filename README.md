@@ -1,12 +1,13 @@
 # gdx_kick
-Jednoduchý script pro vyhození afkujicího hráče.
+A simple script for kicking out AFK player.
 
-### Funkce:
-- Možnost resetovat AFK čas
-- Vyhození hráče za vysoký ping
-- Všechno nastavitelné v configu
+### Features:
+- Ability to reset AFK time and AFK check
+- Warns the player the time until the kick
+- Player kick for high ping
+- Everything configurable in config
 
-### Instalace:
-- Vložte `gdx_kick` do `resources`
-- Do `server.cfg` vložte `ensure gdx_kick`
-- Nastavte hodnoty v `config.lua`
+### Install:
+- Put `gdx_kick` in `resources`
+- Put `ensure gdx_kick` in `server.cfg`
+- Set the values in `config.lua`
