@@ -1,10 +1,18 @@
 fx_version 'adamant'
-games { 'gta5' }
+game 'gta5'
+
+author 'Gdany#2835'
+description 'Advanced AFK kick and ping check script'
+version '1.1'
 
 client_scripts {
-	'client.lua'
+    'config.lua',
+    'lang.lua',
+	'client.lua',
 }
 
 server_scripts {
-	'server.lua'
+    'config.lua',
+    'lang.lua',
+	'server.lua',
 }

@@ -1,16 +1,14 @@
-RegisterServerEvent("kickForBeingAnAFKDouchebag")
-AddEventHandler("kickForBeingAnAFKDouchebag", function()
-	DropPlayer(source, "Byl jsi afk příliš dlouho.")
+RegisterServerEvent("gdx_kick:KickPlayer")
+AddEventHandler("gdx_kick:KickPlayer", function()
+	DropPlayer(source, _U('afk_kick'))
 end)
 
 
 -- Ping Kick
-pingLimit = 400
-
-RegisterServerEvent("checkMyPingBro")
-AddEventHandler("checkMyPingBro", function()
+RegisterServerEvent("gdx_kick:CheckPing")
+AddEventHandler("gdx_kick:CheckPing", function()
 	ping = GetPlayerPing(source)
-	if ping >= pingLimit then
-		DropPlayer(source, "Tvůj ping byl příliš vysoký na to, abys mohl pokračovat v erpení. (Limit: " .. pingLimit .. " Tvůj Ping: " .. ping .. ")")
+	if ping >= Config.PingLimit then
+		DropPlayer(source, _U('afk_ping', Config.PingLimit, ping))
 	end
 end)

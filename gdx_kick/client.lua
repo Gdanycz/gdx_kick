@@ -1,35 +1,36 @@
-local wait = Config.FirstJoinDelay
+local prevPos = vector3(0,0,0)
+
 Citizen.CreateThread(function()
-	Citizen.Wait(wait)
+	Citizen.Wait(Config.FirstJoinDelay)
 	while true do
 		TriggerServerEvent('sendSession:PlayerNumber', #GetActivePlayers())
-		Citizen.Wait(wait)
+		Citizen.Wait(Config.FirstJoinDelay)
 	end
 end)
-
-secondsUntilKick = Config.AfkTime
-
-kickWarning = Config.AfkWarning
 
 Citizen.CreateThread(function()
 	while true do
 		Wait(1000)
-		playerPed = GetPlayerPed(-1)
+		playerPed = PlayerPedId()
 		if playerPed then
 			currentPos = GetEntityCoords(playerPed, true)
-
-			if currentPos == prevPos then
+            local diff = #(currentPos-prevPos)
+			if diff < 0.5 then
 				if time > 0 then
-					if kickWarning and time == math.ceil(secondsUntilKick / 4) then
-						TriggerEvent("chatMessage", "AFK Kick", {255, 0, 0}, {255, 255, 255}, " ^1Za " .. time .. " sekund budes odpojen z duvodu AFK!")
+					if Config.AfkWarning and time == math.ceil(Config.AfkTime / 4) then
+						chatMessage(_U('afk_warning_minutes', (time / 60)))
+				    end
+
+					if Config.AfkWarning and time <= 10 then
+					    chatMessage(_U('afk_warning_seconds', time))
 					end
 
 					time = time - 1
 				else
-					TriggerServerEvent("kickForBeingAnAFKDouchebag")
+					TriggerServerEvent("gdx_kick:KickPlayer")
 				end
 			else
-				time = secondsUntilKick
+				time = Config.AfkTime
 			end
 			prevPos = currentPos
 		end
@@ -37,16 +38,24 @@ Citizen.CreateThread(function()
 end)
 
 -- Ping Kick
-
 Citizen.CreateThread(function()
 	while true do
 		Wait(Config.PingCheckDelay)
 
-		TriggerServerEvent("checkMyPingBro")
+		TriggerServerEvent("gdx_kick:CheckPing")
 	end
 end)
 
-RegisterCommand('afkreset', function(source, args)
-    time = secondsUntilKick
-	TriggerEvent("chatMessage", "AFK Kick", {255, 0, 0}, {255, 255, 255}, " ^0Cas pro vyhozeni ze hry byl obnoven na 30 minut!")
+RegisterCommand(Config.AfkResetCMD, function(source, args)
+    time = Config.AfkTime
+    local timeToKick = time / 60
+	chatMessage(_U('afk_reset', timeToKick))
 end)
+
+RegisterCommand(Config.AfkCheckCMD, function(source, args)
+    chatMessage(_U('afk_check', (time / 60)))
+end)
+
+function chatMessage(message)
+    TriggerEvent("chatMessage", "AFK Kick", {255, 0, 0}, {255, 255, 255}, message)
+end
